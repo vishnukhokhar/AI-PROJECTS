@@ -1,0 +1,37 @@
+Specificity = log_reg_cm[0,0]/(log_reg_cm[0,0]+log_reg_cm[0,1])
+print( Specificity)
+ 
+Sensitivity = log_reg_cm[1,1]/(log_reg_cm[1,0]+log_reg_cm[1,1])
+print(Sensitivity)
+
+TPR
+tn, fp, fn, tp = confusion_matrix(list(y_pred), list(Y_test), labels=[0, 1]).ravel()
+print('True Positive', tp)
+
+print('False Positive', fp)
+
+
+
+ROC
+ sns.set_style('darkgrid')
+ preds_train = model.predict(X_train)
+ # calculate prediction probability
+ prob_train = np.squeeze(model.predict_proba(X_train)[:,1].reshape(1,-1))
+ prob_test = np.squeeze(model.predict_proba(X_test)[:,1].reshape(1,-1))
+ # false positive rate, true positive rate, thresholds
+ fpr1, tpr1, thresholds1 = metrics.roc_curve(Y_test, prob_test)
+ fpr2, tpr2, thresholds2 = metrics.roc_curve(Y_train, prob_train)
+ auc1 = metrics.auc(fpr1, tpr1)
+ # auc score
+ auc2 = metrics.auc(fpr2, tpr2)
+ plt.figure(figsize=(8,8))
+ # plot auc 
+ plt.plot(fpr1, tpr1, color='blue', label='Test ROC curve area = %0.2f'%auc1)
+ plt.plot(fpr2, tpr2, color='green', label='Train ROC curve area = %0.2f'%auc2)
+ plt.plot([0,1],[0,1], 'r--')
+ plt.xlim([-0.1, 1.1])
+ plt.ylim([-0.1, 1.1])
+ plt.xlabel('False Positive Rate', size=14)
+ plt.ylabel('True Positive Rate', size=14)
+ plt.legend(loc='lower right')
+ plt.show() 
